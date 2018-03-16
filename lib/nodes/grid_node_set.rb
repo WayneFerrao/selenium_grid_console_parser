@@ -1,3 +1,4 @@
+require 'set'
 require 'json'
 
 module SeleniumGridConsoleParser
