@@ -1,9 +1,9 @@
 require 'nokogiri'
 require 'open-uri'
 
-require 'nodes/grid_node'
-require 'nodes/grid_node_set'
-require 'nodes/configuration/node_configuration'
+require_relative 'nodes/grid_node'
+require_relative 'nodes/grid_node_set'
+require_relative 'nodes/configuration/node_configuration'
 
 module SeleniumGridConsoleParser
   class << self

@@ -1,4 +1,4 @@
-require 'nodes/client/grid_node_client'
+require_relative '../client/grid_node_client'
 
 require 'json'
 
