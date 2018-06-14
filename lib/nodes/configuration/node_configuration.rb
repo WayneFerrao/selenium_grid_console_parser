@@ -8,7 +8,9 @@ module SeleniumGridConsoleParser
         configuration["capabilities"] = []
         configuration_html_elements.each do |parameter_html_element|
           parameter = parameter_html_element.text.split(": ")
-          if parameter[0] != "capabilities"
+          if parameter [0] == "custom"
+            configuration["custom"] = set_custom_value(parameter[1])
+          elsif parameter[0] != "capabilities"
             configuration[parameter[0]] = parameter[1]
           else
             configuration["capabilities"] << Capabilities.build(parameter[1])
@@ -23,6 +25,11 @@ module SeleniumGridConsoleParser
       end
 
       private
+
+      def self.set_custom_value(val)
+        val.gsub(/[{}:]/,'').split(', ')
+          .map{|h| h1,h2 = h.split('='); {h1 => h2.strip}}.reduce(:merge)
+      end
 
       def self.package_caps(caps)
         caps.count == 1 ? caps.first : {}
