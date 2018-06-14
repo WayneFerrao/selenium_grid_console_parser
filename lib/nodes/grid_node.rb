@@ -12,26 +12,29 @@ module SeleniumGridConsoleParser
         @data = GridNodeData.new(self)
       end
 
-      def name
-        @configuration["capabilities"]["applicationName"]
+      def capabilities
+        @configuration["capabilities"]
       end
 
-      def multi_caps?
-        @configuration["capabilities"].is_a?(Array) ? true : false
+      def custom
+        @configuration["custom"].gsub(/[{}:]/,'').split(', ')
+          .map{|h| h1,h2 = h.split('='); {h1 => h2.strip}}.reduce(:merge)
       end
 
-      def capabilities_by_attributes(*opts)
-        multi_caps? ? find_cap(@configuration, opts.first) : has_attrs?(@configuration["capabilities"], opts.first)
+      def status
+        return 'free' if free?
+        return 'busy' if busy?
+        return 'down' if down?
+        'unknown'
       end
 
       def free?
-        if down?
-          @free = false
-        else
-          sessions = @data.sessions
-          @free = sessions["value"].size == 0 ? true : false
-        end
-        @free
+        busy? || down? ? false : true
+      end
+
+      def busy?
+        sessions = @data.sessions
+        sessions["value"].size == 0 ? false : true
       end
 
       def down?
@@ -50,26 +53,6 @@ module SeleniumGridConsoleParser
         grid_node_hash = self.instance_variables.each_with_object({}) { |var, hash| hash[var.to_s.delete("@")] = self.instance_variable_get(var) }
         grid_node_hash.delete("data")
         grid_node_hash
-      end
-
-      private
-
-      def find_cap(config, opts)
-        result = nil
-        config["capabilities"].each do |c|
-          if result.nil? && has_attrs?(c, opts)
-            result = c
-          end
-        end
-        result
-      end
-
-      def has_attrs?(main, sub)
-        result = []
-        sub.each do |k,v|
-          result << true if (main.has_key?(k.to_s) && main[k.to_s] == v)
-        end
-        (!result.any? || result.include?(false)) ? false : true
       end
     end
   end
