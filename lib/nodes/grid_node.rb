@@ -17,8 +17,7 @@ module SeleniumGridConsoleParser
       end
 
       def custom
-        @configuration["custom"].gsub(/[{}:]/,'').split(', ')
-          .map{|h| h1,h2 = h.split('='); {h1 => h2.strip}}.reduce(:merge)
+        @configuration["custom"]
       end
 
       def status
