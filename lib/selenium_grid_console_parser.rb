@@ -1,5 +1,5 @@
 require 'nokogiri'
-require 'open-uri'
+require 'net/http'
 
 require_relative 'nodes/grid_node'
 require_relative 'nodes/grid_node_set'
@@ -14,7 +14,8 @@ module SeleniumGridConsoleParser
   class Parser
 
     def initialize(url)
-      @page = Nokogiri::HTML(open("#{url}/grid/console"))
+      url = "http://#{url}/grid/console"
+      @page = Nokogiri::HTML(Net::HTTP.get(URI(url)))
     end
 
     def nodes
