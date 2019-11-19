@@ -28,7 +28,8 @@ module SeleniumGridConsoleParser
 
       def self.set_custom_value(val)
         val.gsub(/[{}:]/,'').split(', ')
-          .map{|h| h1,h2 = h.split('='); {h1 => h2.strip}}.reduce(:merge)
+           .map{|h| h1,h2 = h.split('=') ; {h1 => h2.nil? ? '' : h2.strip}}
+           .reduce(:merge)
       end
 
       def self.package_caps(caps)
