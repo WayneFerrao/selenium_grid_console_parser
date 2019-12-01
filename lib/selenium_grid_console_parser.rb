@@ -14,7 +14,7 @@ module SeleniumGridConsoleParser
   class Parser
 
     def initialize(url)
-      url = "http://#{url}/grid/console"
+      url = "#{url}/grid/console"
       @page = Nokogiri::HTML(Net::HTTP.get(URI(url)))
     end
 
