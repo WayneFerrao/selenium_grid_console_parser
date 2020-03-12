@@ -7,7 +7,7 @@ module SeleniumGridConsoleParser
         configuration = {}
         configuration["capabilities"] = []
         configuration_html_elements.each do |parameter_html_element|
-          parameter = parameter_html_element.text.split(": ")
+          parameter = parameter_html_element.text.split(/: (.+)/)
           if parameter [0] == "custom"
             configuration["custom"] = set_custom_value(parameter[1])
           elsif parameter[0] != "capabilities"
